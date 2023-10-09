@@ -38,7 +38,7 @@ import PendingTask from './PendingTask.vue';
 
 <style>
     .Board-element {
-        border: 1px solid grey;
+        border: 1px solid rgb(227, 227, 227);
         height: 100vh;
         margin: 0.5rem;
         box-shadow: 0px 0px 5px grey;

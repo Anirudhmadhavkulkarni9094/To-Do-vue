@@ -67,6 +67,10 @@
         // Implement your logic to handle the form submission here
         // You can access the new task data from this.newTask.title and this.newTask.description
         // Example:
+        if(this.newTask.title.trim().length == 0 || this.newTask.description.trim().length == 0){
+            alert("Title or description cannot be empty!");
+        }
+        else{
         axios.post("https://to-do-w2m4.onrender.com/api/v1/task", {
           title: this.newTask.title,
           Desc: this.newTask.description,
@@ -82,8 +86,10 @@
           .catch(error => {
             console.error("Error:", error);
           });
-      },
+      }
+    
     }
+}
   };
   </script>
   
