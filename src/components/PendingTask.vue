@@ -10,8 +10,8 @@
           <label for="title">Title:</label>
           <input type="text" id="title" v-model="newTask.title" required  placeholder="Add title"/>
           <br />
-          <label for="description">Description:</label>
-          <textarea id="description" v-model="newTask.description" required placeholder="Add description"></textarea>
+          <label for="description">Description: (120 char max)</label>
+          <textarea id="description" v-model="newTask.description" required placeholder="Add description" maxlength="120"></textarea>
           <br />
           <div>
               <button class="btn" type="submit">Add Task</button>
