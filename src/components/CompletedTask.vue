@@ -10,7 +10,7 @@
   <script>
   import axios from 'axios';
  
-import CardFinish from './CardFinish.vue';
+import CardFinish from './Card/CardFinish.vue';
   
   export default {
     name: "CompletedTask",

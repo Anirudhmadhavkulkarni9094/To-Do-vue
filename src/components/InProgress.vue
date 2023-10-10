@@ -9,7 +9,7 @@
   
   <script>
   import axios from 'axios';
-  import CardProgress from './CardProgress.vue';
+  import CardProgress from './Card/CardProgress.vue';
   
   export default {
     name: "InProgress",

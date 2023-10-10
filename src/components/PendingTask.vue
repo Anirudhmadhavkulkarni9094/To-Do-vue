@@ -27,7 +27,7 @@
   
   <script>
   import axios from 'axios';
-  import CardComp from './CardComp.vue';
+  import CardComp from './Card/CardComp.vue';
   
   export default {
     name: "PendingTask",
@@ -74,6 +74,7 @@
         axios.post("https://to-do-w2m4.onrender.com/api/v1/task", {
           title: this.newTask.title,
           Desc: this.newTask.description,
+          Date: Date.now(),
           status: "pending" // You can set the default status as needed
         })
           .then(response => {
