@@ -1,32 +1,29 @@
 <script>
-import CompletedTask from './CompletedTask.vue';
-import InProgress from './InProgress.vue';
+
 import PendingTask from './PendingTask.vue';
 
     export default{
     name: "TaskBoard",
-    components: { PendingTask, InProgress, CompletedTask }
+    components: { PendingTask }
 }
 </script>
 
 <template>
     <div class="Board">
         <PendingTask/>
-        <InProgress/>
-        <CompletedTask/>
     </div>
 </template>
 
 <style scoped>
     .Board{
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-columns: 1fr;
         text-align: center;
     }
 
     @media screen and (max-width : 730px) {
         .Board{
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr ;
         }
     }
     @media screen and (max-width : 400px) {
@@ -37,6 +34,9 @@ import PendingTask from './PendingTask.vue';
 </style>
 
 <style>
+button{
+    cursor: pointer!important;
+}
     .Board-element {
         border: 1px solid rgb(227, 227, 227);
         height: 100vh;

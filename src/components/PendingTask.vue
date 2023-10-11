@@ -1,98 +1,117 @@
 <template>
-    <div class="PendingTask Board-element">
-      <div class="pendingHeader">
-        <h1>Pending tasks : {{ filteredTasks.length }}</h1>
-        <button class="btn" @click="showForm = true">New Task &#043;</button>
-      </div>
-      <!-- Show the form when showForm is true -->
-      <div v-if="showForm" class="taskForm">
-        <form @submit.prevent="add" class="add-form">
-          <label for="title">Title:</label>
-          <input type="text" id="title" v-model="newTask.title" required  placeholder="Add title"/>
-          <br />
-          <label for="description">Description: (120 char max)</label>
-          <textarea id="description" v-model="newTask.description" required placeholder="Add description" maxlength="120"></textarea>
-          <br />
-          <div>
-              <button class="btn" type="submit">Add Task</button>
-              <button class="btn" @click="showForm = false">Cancel</button>
-        </div>
-        </form>
-      </div>
-      <div v-for="(task, index) in filteredTasks" :key="index">
-        <CardComp :title="task.title" :desc="task.Desc" :date="task.Date" :id="task._id" />
-      </div>
+  <div class="PendingTask Board-element">
+    <div class="pendingHeader">
+      <h1>Pending tasks : {{ tasks.length }}</h1>
+      <button class="btn" @click="showForm = true">New Task &#043;</button>
     </div>
-  </template>
+    <!-- Show the form when showForm is true -->
+    <div v-if="showForm" class="taskForm">
+      <form @submit.prevent="add" class="add-form">
+        <label for="title">Title:</label>
+        <input type="text" id="title" v-model="newTask.title" required placeholder="Add title" />
+        <br />
+        <label for="description">Description: (120 char max)</label>
+        <textarea id="description" v-model="newTask.description" required placeholder="Add description" maxlength="120"></textarea>
+        <br />
+        <label>Status</label>
+        <input placeholder="Enter" v-model="newTask.status" required />
+
+        <div>
+          <button class="btn" type="submit">Add Task</button>
+          <button class="btn" @click="showForm = false">Cancel</button>
+        </div>
+      </form>
+    </div>
+    <div v-for="(task, index) in tasks" :key="index">
+      <CardComp
+        :title="task.title"
+        :desc="task.Desc"
+        :date="task.Date"
+        :id="task._id"
+        :status="task.status"
+        :options="options"
+        :addOptionMethod="addOption"
+      />
+    </div>
+  </div>
+</template>
+
+<script>
+import axios from 'axios';
+import CardComp from './Card/CardComp.vue';
+
+export default {
+  name: "PendingTask",
+  components: { CardComp },
+  data() {
+    return {
+      tasks: [],
+      showForm: false,
+      newTask: {
+        title: "",
+        description: "",
+        status: "",
+      },
+      options: [
+        "pending",
+        "In-progress",
+        "Completed"
+      ],
+    };
+  },
+
+  mounted() {
+    this.fetchTasks();
+  },
   
-  <script>
-  import axios from 'axios';
-  import CardComp from './Card/CardComp.vue';
-  
-  export default {
-    name: "PendingTask",
-    components: { CardComp },
-    data() {
-      return {
-        tasks: [],
-        showForm: false,
-        newTask: {
-          title: "",
-          description: ""
-        }
-      };
+  methods: {
+    fetchTasks() {
+      axios.get("https://to-do-w2m4.onrender.com/api/v1/task")
+        .then((res) => {
+          this.tasks = res.data;
+          console.log(this.tasks);
+          this.fetchTasks();
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
     },
-    computed: {
-      filteredTasks() {
-        // Filter tasks with "working" status
-        return this.tasks.filter(task => task.status === "pending");
+    addOption(option) {
+      if(!this.options.includes(option.toLowerCase())){
+      this.options.push(option.toLowerCase());
+      }
+      else{
+        alert("Please select from dropdown")
       }
     },
-    mounted() {
-      this.fetchTasks();
-    },
-    methods: {
-      fetchTasks() {
-        axios.get("https://to-do-w2m4.onrender.com/api/v1/task")
-          .then(res => {
-            this.tasks = res.data;
-            console.log(this.tasks);
-            this.fetchTasks();
-          })
-          .catch(error => {
-            console.error("Error:", error);
-          });
-      },
-      add() {
-        // Implement your logic to handle the form submission here
-        // You can access the new task data from this.newTask.title and this.newTask.description
-        // Example:
-        if(this.newTask.title.trim().length == 0 || this.newTask.description.trim().length == 0){
-            alert("Title or description cannot be empty!");
-        }
-        else{
+    add() {
+      // Implement your logic to handle the form submission here
+      // You can access the new task data from this.newTask.title and this.newTask.description
+      // Example:
+      if (this.newTask.title.trim().length == 0 || this.newTask.description.trim().length == 0) {
+        alert("Title or description cannot be empty!");
+      } else {
         axios.post("https://to-do-w2m4.onrender.com/api/v1/task", {
           title: this.newTask.title,
           Desc: this.newTask.description,
           Date: Date.now(),
-          status: "pending" // You can set the default status as needed
+          status: this.newTask.status, // You can set the default status as needed
         })
-          .then(response => {
+          .then((response) => {
             // Handle the response and reset the form
-            console.log(response)
+            console.log(response);
             this.showForm = false;
             // Optionally, refresh the task list
             this.fetchTasks();
           })
-          .catch(error => {
+          .catch((error) => {
             console.error("Error:", error);
           });
       }
-    
-    }
-}
-  };
-  </script>
+    },
+  },
+};
+</script>
   
   <style scoped>
   .add-form{
